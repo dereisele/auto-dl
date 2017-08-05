@@ -3,8 +3,10 @@ from pluginbase import PluginBase
 from dbmanager import DBManager
 import configparser
 import os
+import sys
 
 config = configparser.ConfigParser()
+
 
 
 class AutoDl(object):
@@ -17,7 +19,8 @@ class AutoDl(object):
 
     def __init__(self):
         """Init main class."""
-        global test
+        doScrap = True
+        
         self.load_config()
         self.init_config()
         self.myDB = DBManager(config["BASIC"]["DBLocation"])
@@ -28,7 +31,11 @@ class AutoDl(object):
             plugin = self.plugin_source.load_plugin(plugin_name)
             plugin.Scrapper().setup(self)
 
-        self.scrap()
+        if len(sys.argv) == 2:
+            doScrap = sys.argv[1] == "-noscrap"
+
+        if doScrap:
+            self.scrap()
         self.save_config()
 
     def init_config(self):
@@ -78,8 +85,9 @@ class AutoDl(object):
     def scrap(self):
         """Execute all scrappers."""
         for name, s in sorted(self.scrappers.items()):
-            print('{}: {}'.format(name, s()))
-            print('')
+            if config["SCRAPPER"][name] == "True":
+                print('{}: {}'.format(name, s()))
+                print('')
 
 
 if __name__ == '__main__':
