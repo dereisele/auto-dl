@@ -94,7 +94,7 @@ class AutoDl(object):
         if name not in self.config["SCRAPER"]:
             self.config["SCRAPER"][name] = "True"
 
-    def scrap(self):
+    def scrape(self):
         """Execute all scrapers."""
         for name, s in sorted(self.scrapers.items()):
             if self.config["SCRAPER"][name] == "True":
