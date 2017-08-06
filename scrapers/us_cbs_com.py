@@ -1,18 +1,18 @@
-import scrappertools
+import scrapertools
 import re
 import json
 from bs4 import BeautifulSoup
 import requests
 
-class Scrapper(scrappertools.BasicScrapper):
+class Scraper(scrapertools.BasicScraper):
     BASE_URL = "http://www.cbs.com"
 
     def setup(self, app):
         print("setup cbs")
         self.parent = app
-        self.parent.register_scrapper('us_cbs_com', self.scrap)
+        self.parent.register_scraper('us_cbs_com', self.scrape)
 
-    def scrap(self):
+    def scrape(self):
         r = requests.get(self.BASE_URL + "/shows")
         bs = BeautifulSoup(r.text, "html.parser")
 

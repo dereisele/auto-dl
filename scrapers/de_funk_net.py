@@ -1,10 +1,10 @@
 import re
 from bs4 import BeautifulSoup
 import requests
-import scrappertools
+import scrapertools
 
 
-class Scrapper(scrappertools.BasicScrapper):
+class Scraper(scrapertools.BasicScraper):
 
     BASE_URL = "http://www.funk.net"
     parent = ""
@@ -12,7 +12,7 @@ class Scrapper(scrappertools.BasicScrapper):
     def setup(self, app):
         print("setup Funk")
         self.parent = app
-        self.parent.register_scrapper('de_funk_net', self.scrap)
+        self.parent.register_scraper('de_funk_net', self.scrape)
 
     def identify_show(self, name):
         """Translate messy show name to standard names."""
@@ -31,8 +31,8 @@ class Scrapper(scrappertools.BasicScrapper):
         print("{}->{}".format(name_old, name.strip()))
         return name.strip()
 
-    def scrap(self):
-        """Scrap Funk.net (Germany)."""
+    def scrape(self):
+        """Scrape Funk.net (Germany)."""
         print("    /FUNK")
         r = requests.get(self.BASE_URL + "/serien")
         bs = BeautifulSoup(r.text, "html.parser")
