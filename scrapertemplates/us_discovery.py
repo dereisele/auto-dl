@@ -1,11 +1,11 @@
-import scrappertools
+import scrapertools
 from bs4 import BeautifulSoup
 import re
 import requests
 import json
 
-class DiscoveryScrapper(scrappertools.BasicScrapper):
-    """Scrapper Template for DiscoveryGo (USA)."""
+class DiscoveryScraper(scrapertools.BasicScraper):
+    """Scraper Template for DiscoveryGo (USA)."""
 
     CHANNEL = ""
 
@@ -20,8 +20,8 @@ class DiscoveryScrapper(scrappertools.BasicScrapper):
              "discoverylife": "DLF",
              "tlc": "TLC"}
 
-    def scrap(self):
-        """Scrap Discovery networks (USA)."""
+    def scrape(self):
+        """Scrape Discovery networks (USA)."""
         for s in self.getShows():
             print(s[0])
             self.getEpisodes(s)

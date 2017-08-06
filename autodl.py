@@ -7,33 +7,30 @@ import os
 import sys
 
 
-
-
-
 class AutoDl(object):
     """Main class."""
 
-    scrappers = {}
+    scrapers = {}
     myDB = ""
     config = configparser.ConfigParser()
 
-    plugin_base = PluginBase(package='autodl.scrapper')
+    plugin_base = PluginBase(package='autodl.scraper')
 
     def __init__(self):
         """Init main class."""
-        doScrap = True
+        doScrape = True
 
         self.load_config()
         self.init_config()
         self.myDB = DBManager(self.config["BASIC"]["DBLocation"])
         self.plugin_source = self.plugin_base.make_plugin_source(
-                             searchpath=['./scrappers'])
+                             searchpath=['./scrapers'])
 
         for plugin_name in self.plugin_source.list_plugins():
             plugin = self.plugin_source.load_plugin(plugin_name)
-            plugin.Scrapper().setup(self)
+            plugin.Scraper().setup(self)
 
-        doScrap = "-noscrap" not in sys.argv
+        doScrape = "-noscrape" not in sys.argv
         doDl = "-nodl" not in sys.argv
 
         if "-add" in sys.argv:
@@ -42,8 +39,8 @@ class AutoDl(object):
             newLang = sys.argv[i + 2]
             self.myDB.addShowToDL(newShow, newLang)
 
-        if doScrap:
-            self.scrap()
+        if doScrape:
+            self.scrape()
 
         self.save_config()
         self.myDB.matchEpisodes()
@@ -87,20 +84,20 @@ class AutoDl(object):
         with open('config.ini', 'w') as configfile:
             self.config.write(configfile)
 
-    def register_scrapper(self, name, scrapper):
-        """Use to register a scrapper plugin."""
-        self.scrappers[name] = scrapper
+    def register_scraper(self, name, scraper):
+        """Use to register a scraper plugin."""
+        self.scrapers[name] = scraper
 
-        if "SCRAPPER" not in self.config.sections():
-            self.config.add_section("SCRAPPER")
+        if "SCRAPER" not in self.config.sections():
+            self.config.add_section("SCRAPER")
 
-        if name not in self.config["SCRAPPER"]:
-            self.config["SCRAPPER"][name] = "True"
+        if name not in self.config["SCRAPER"]:
+            self.config["SCRAPER"][name] = "True"
 
     def scrap(self):
-        """Execute all scrappers."""
-        for name, s in sorted(self.scrappers.items()):
-            if self.config["SCRAPPER"][name] == "True":
+        """Execute all scrapers."""
+        for name, s in sorted(self.scrapers.items()):
+            if self.config["SCRAPER"][name] == "True":
                 print('{}: {}'.format(name, s()))
                 print('')
 

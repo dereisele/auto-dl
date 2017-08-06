@@ -12,7 +12,7 @@ class Scraper(scrapertools.BasicScraper):
     def setup(self, app):
         print("setup Funk")
         self.parent = app
-        self.parent.register_scraper('de_funk_net', self.scrap)
+        self.parent.register_scraper('de_funk_net', self.scrape)
 
     def identify_show(self, name):
         """Translate messy show name to standard names."""

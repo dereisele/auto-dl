@@ -10,9 +10,9 @@ class Scraper(scrapertools.BasicScraper):
     def setup(self, app):
         print("setup dmax")
         self.parent = app
-        self.parent.register_scraper('de_dmax_de', self.scrap)
+        self.parent.register_scraper('de_dmax_de', self.scrape)
 
-    def scrap(self):
+    def scrape(self):
         r = requests.get(self.BASE_URL + "/videos/#dni-listing2143929440-alle")
         bs = BeautifulSoup(r.text, "html.parser")
 

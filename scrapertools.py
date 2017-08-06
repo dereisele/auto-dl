@@ -1,9 +1,9 @@
-"""Tools for scrappers."""
+"""Tools for scrapers."""
 import staticdata
 
 
-class BasicScrapper(object):
-    """Class to inherite scrappers."""
+class BasicScraper(object):
+    """Class to inherite scrapers."""
 
     def getOVLang(self, name):
         """Return original language of TV Show."""
