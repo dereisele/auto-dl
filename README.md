@@ -1,5 +1,6 @@
 # auto-dl
 Automated downloader for tv-shows using youtube-dl.
+See [here](https://github.com/derEisele/auto-dl/blob/stable/SUPPORTED_SITES.md) for supported sites.
 
 ## How it works:
 1. Scrape websites and insert episodes in a DB
