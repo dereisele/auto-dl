@@ -19,7 +19,7 @@ class Downloader(object):
     def download(self, item):
         dl_id, episode_id, season, episode, name, url, loc, _, state, show = item
 
-        if not loc == self.dl_config["BASIC"]["defaultlocation"]:
+        if not loc == self.dl_config["BASIC"]["defaultlocation"] or not loc == "any":
             cmdline = self.dl_config["NETWORK"]["vpnstart"].format(loc=loc).split()
             proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE)
             time.sleep(2)
@@ -43,7 +43,7 @@ class Downloader(object):
         self.parent.myDB.removeEpisodeFromDL(episode_id)
         self.parent.myDB.updateEpisodeDlState(episode_id, "1")
 
-        if not loc == self.dl_config["BASIC"]["defaultlocation"]:
+        if not loc == self.dl_config["BASIC"]["defaultlocation"] or not loc == "any":
             cmdline = self.dl_config["NETWORK"]["vpnstop"].split()
             proc = subprocess.Popen(cmdline,
                                     stdout=subprocess.PIPE)

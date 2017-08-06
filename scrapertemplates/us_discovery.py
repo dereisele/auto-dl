@@ -92,6 +92,6 @@ class DiscoveryScraper(scrapertools.BasicScraper):
                                                     seasonNumber,
                                                     episodeNumber,
                                                     myEpisodeTitle,
-                                                    url, "us", quality)
+                                                    url, "any", quality)
                     except:
                         print("Skip episode")
