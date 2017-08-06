@@ -1,7 +1,7 @@
 import youtube_dl
 import os
 import subprocess
-
+import time
 
 
 class Downloader(object):
@@ -16,25 +16,28 @@ class Downloader(object):
         for item in queue:
             self.download(item)
 
-
     def download(self, item):
         dl_id, episode_id, season, episode, name, url, loc, _, state, show = item
 
         if not loc == self.dl_config["BASIC"]["defaultlocation"]:
             cmdline = self.dl_config["NETWORK"]["vpnstart"].format(loc=loc)
-            proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=FNULL)
+            proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE)
             time.sleep(2)
 
         season = "%02d" % season
         episode = "%02d" % episode
 
-        os.makedirs(self.dl_config["BASIC"]["medialocation"] + "/" + show.replace(" ", "-"), exist_ok=True)
-        os.chdir(self.dl_config["BASIC"]["medialocation"] + "/" + show.replace(" ", "-"))
+        os.makedirs(self.dl_config["BASIC"]["medialocation"]
+                    + "/" + show.replace(" ", "-"), exist_ok=True)
+        os.chdir(self.dl_config["BASIC"]["medialocation"]
+                 + "/" + show.replace(" ", "-"))
 
         self.parent.myDB.updateDlState(episode_id, "1")
 
         ydl_opts = dict()
-        ydl_opts["outtmpl"] = "{}_{}_S{}E{}.%(ext)s".format(show.replace(" ", "-"), name.replace(" ", "-"), season, episode)
+        ydl_opts["outtmpl"] = "{}_{}_S{}E{}.%(ext)s".format(show.replace(" ", "-"),
+                                                            name.replace(" ", "-"),
+                                                            season, episode)
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
         self.parent.myDB.removeEpisodeFromDL(episode_id)

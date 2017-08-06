@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import requests
 import scrappertools
 
-print("Loaded Funk")
 
 class Scrapper(scrappertools.BasicScrapper):
 
@@ -11,7 +10,7 @@ class Scrapper(scrappertools.BasicScrapper):
     parent = ""
 
     def setup(self, app):
-        print("register")
+        print("setup Funk")
         self.parent = app
         self.parent.register_scrapper('de_funk_net', self.scrap)
 

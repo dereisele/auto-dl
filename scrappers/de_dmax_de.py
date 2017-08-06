@@ -36,6 +36,7 @@ class Scrapper(scrappertools.BasicScrapper):
 
             for sr in seasons_raw:
                 seasonNumber_raw = sr.string
+                seasonNumber_raw = seasonNumber_raw.lstrip("NEU - ")
 
                 seasonNumber = False
 

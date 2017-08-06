@@ -107,6 +107,7 @@ class DBManager(object):
         WHERE episodes.show_id = shows.id
         AND episodes.download = "0"
         AND shows.name = shows_dl.name
+        AND shows.lang = shows_dl.lang
         """
         self.cursor.execute(sql_command)
         return self.cursor.fetchall()
