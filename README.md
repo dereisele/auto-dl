@@ -67,10 +67,10 @@ Example:
 In contrast to a Virtual Machine it runs *directly* on the hardware to preserve performance. So you can limit VPN to this script to insure network connectivity of your computer.
 
 ### Use a server:
-I highly recomment this script to be run on a server since scraping and downloading can take a long time (~20 min/Video @ 25MBit/s).
+I highly recommend this script to be run on a server since scraping and downloading can take a long time (~20 min/Video @ 25MBit/s).
 Even a 35$ Raspberry Pi performs well and you can use it in audition as a NAS.
 
-## Contribiute:
+## Contribute:
 First I want to say thank you for considering contribiuting to this project.
 
 ### Writing a scraper
