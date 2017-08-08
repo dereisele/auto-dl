@@ -1,0 +1,9 @@
+*.pyc
+test.py
+*.db
+config.ini
+/__pycache__
+/scrapers/__pycache__
+/scrapertemplates/__pycache__
+/test
+/media

@@ -18,10 +18,12 @@ class Downloader(object):
 
     def download(self, item):
         dl_id, episode_id, season, episode, name, url, loc, _, state, show = item
+        myLoc = self.parent.config["BASIC"]["defaultlocation"]
 
-        if not loc == self.dl_config["BASIC"]["defaultlocation"] or not loc == "any":
-            cmdline = self.dl_config["NETWORK"]["vpnstart"].format(loc=loc).split()
-            proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE)
+        if (loc != myLoc) and (loc != "any"):
+            print(myLoc + " is not " + loc)
+            #cmdline = self.dl_config["NETWORK"]["vpnstart"].format(loc=loc).split()
+            #proc = subprocess.Popen(cmdline)
             time.sleep(2)
 
         season = "%02d" % season
@@ -32,7 +34,7 @@ class Downloader(object):
         os.chdir(self.dl_config["BASIC"]["medialocation"]
                  + "/" + show.replace(" ", "-"))
 
-        self.parent.myDB.updateDlState(episode_id, "1")
+        self.parent.myDB.updateQueueState(episode_id, "1")
 
         ydl_opts = dict()
         ydl_opts["outtmpl"] = "{}_{}_S{}E{}.%(ext)s".format(show.replace(" ", "-"),
@@ -43,7 +45,6 @@ class Downloader(object):
         self.parent.myDB.removeEpisodeFromDL(episode_id)
         self.parent.myDB.updateEpisodeDlState(episode_id, "1")
 
-        if not loc == self.dl_config["BASIC"]["defaultlocation"] or not loc == "any":
+        if (not loc == self.dl_config["BASIC"]["defaultlocation"]) or (not loc == "any"):
             cmdline = self.dl_config["NETWORK"]["vpnstop"].split()
-            proc = subprocess.Popen(cmdline,
-                                    stdout=subprocess.PIPE)
+            proc = subprocess.Popen(cmdline)
