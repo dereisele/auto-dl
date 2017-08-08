@@ -22,8 +22,8 @@ class Downloader(object):
 
         if (loc != myLoc) and (loc != "any"):
             print(myLoc + " is not " + loc)
-            #cmdline = self.dl_config["NETWORK"]["vpnstart"].format(loc=loc).split()
-            #proc = subprocess.Popen(cmdline)
+            cmdline = self.dl_config["NETWORK"]["vpnstart"].format(loc=loc).split()
+            proc = subprocess.Popen(cmdline)
             time.sleep(2)
 
         season = "%02d" % season
@@ -45,6 +45,6 @@ class Downloader(object):
         self.parent.myDB.removeEpisodeFromDL(episode_id)
         self.parent.myDB.updateEpisodeDlState(episode_id, "1")
 
-        if (not loc == self.dl_config["BASIC"]["defaultlocation"]) or (not loc == "any"):
+        if (loc != myLoc) and (loc != "any"):
             cmdline = self.dl_config["NETWORK"]["vpnstop"].split()
             proc = subprocess.Popen(cmdline)
