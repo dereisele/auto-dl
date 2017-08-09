@@ -1,24 +1,31 @@
+"""Scraper for cbs.com (USA)."""
 import scrapertools
 import re
 import json
 from bs4 import BeautifulSoup
 import requests
 
+
 class Scraper(scrapertools.BasicScraper):
+    """Basic Scraper for cbs.com (USA)."""
+
     BASE_URL = "http://www.cbs.com"
 
     def setup(self, app):
+        """Setup cbs.com sraper."""
         print("setup cbs")
         self.parent = app
         self.parent.register_scraper('us_cbs_com', self.scrape)
 
     def scrape(self):
+        """Scrape cbs.com."""
         r = requests.get(self.BASE_URL + "/shows")
         bs = BeautifulSoup(r.text, "html.parser")
 
         shows = bs.find_all("li", class_="showPosterWrapper")
 
-        url_episode = "http://www.cbs.com/carousels/videosBySection/{id}/offset/{offset}/limit/{limit}/xs/0/10/"
+        url_episode = "http://www.cbs.com/carousels/videosBySection/{id}"
+        url_episode += "/offset/{offset}/limit/{limit}/xs/0/10/"
 
         for s in shows:
             myTVShowTitle = s.div.div.next_sibling.next_sibling.string
@@ -33,22 +40,23 @@ class Scraper(scrapertools.BasicScraper):
             carousels = bs.find_all("div", id=re.compile("id-carousel-[0-9]+"))
 
             for c in carousels:
-                self.limit = 25
-                self.offset = 0
+                limit = 25
+                offset = 0
+                total = 42  # 42 as placeholder
+                cID = c["id"].lstrip("id-carousel-")
+                done = False
 
-                self.done = False
-
-                while not self.done:
+                while not done:
                     print(" " + str(self.offset))
-                    r = requests.get(url_episode.format(limit=self.limit,
-                                                        offset=self.offset,
-                                                        id=c["id"].lstrip("id-carousel-")))
+                    r = requests.get(url_episode.format(limit=limit,
+                                                        offset=offset,
+                                                        id=cID))
                     j_episodes = json.loads(r.text)
 
                     print("  test success")
                     if j_episodes["success"]:
                         print("    X")
-                        self.total = j_episodes["result"]["total"]
+                        total = j_episodes["result"]["total"]
 
                         print("  test full episode")
                         if j_episodes["result"]["title"] == "Full Episodes":
@@ -65,12 +73,12 @@ class Scraper(scrapertools.BasicScraper):
                                                             episodeNumber,
                                                             myEpisodeTitle,
                                                             url, "us",
-                                                            "unknown")
+                                                            "720")
                             print("  test total")
 
-                            self.done = (self.offset + self.limit) >= self.total
-                            self.offset += 25
+                            done = (offset + limit) >= total
+                            offset += 25
                         else:
-                            self.done = True
+                            done = True
                     else:
-                        self.done = True
+                        done = True

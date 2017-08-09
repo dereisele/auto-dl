@@ -20,15 +20,16 @@ class Downloader(object):
         """Disable VPN."""
         if self.VPN or forced:
             cmdline = self.dl_config["NETWORK"]["vpnstop"].split()
-            proc = subprocess.Popen(cmdline)
+            subprocess.Popen(cmdline)
 
     def setLocation(self, loc):
         """Activate VPN if neccessary."""
         myLoc = self.parent.config["BASIC"]["defaultlocation"]
         if loc not in (myLoc, "any", self.VPN):
             print(myLoc + " is not " + loc)
-            cmdline = self.dl_config["NETWORK"]["vpnstart"].format(loc=loc).split()
-            proc = subprocess.Popen(cmdline)
+            cmdline = self.dl_config["NETWORK"]["vpnstart"]
+            cmdline = cmdline.format(loc=loc).split()
+            subprocess.Popen(cmdline)
             self.VPN = loc
             time.sleep(15)
 
@@ -43,7 +44,8 @@ class Downloader(object):
 
     def download(self, item):
         """Download item from queue."""
-        dl_id, episode_id, season, episode, name, url, loc, _, state, show = item
+        (dl_id, episode_id, season, episode,
+         name, url, loc, _, state, show) = item
 
         self.setLocation(loc)
 
@@ -57,10 +59,12 @@ class Downloader(object):
 
         self.parent.myDB.updateQueueState(episode_id, "1")
 
+        outTmpl = "{}_{}_S{}E{}.%(ext)s"
         ydl_opts = dict()
-        ydl_opts["outtmpl"] = "{}_{}_S{}E{}.%(ext)s".format(show.replace(" ", "-"),
-                                                            name.replace(" ", "-"),
-                                                            season, episode)
+        ydl_opts["outtmpl"] = outTmpl.format(show.replace(" ", "-"),
+                                             name.replace(" ", "-"),
+                                             season, episode)
+
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
 
@@ -68,4 +72,5 @@ class Downloader(object):
         self.parent.myDB.updateEpisodeDlState(episode_id, 1)
 
     def __del__(self):
+        """Disable VPN in any case."""
         self.release(True)

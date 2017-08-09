@@ -74,13 +74,10 @@ class DBManager(object):
 
         self.cursor.execute(sql_command, (name, lang))
 
-    def addEpisode(self, show_id, season, episode, name, url, loc="any", quality="unknown"):
+    def addEpisode(self, show_id, season, episode, name, url,
+                   loc="any", quality="unknown"):
         """Add episode to DB if not exists."""
         name = self.prepareStr(name)
-        #sql_command = "INSERT INTO episodes (show_id, season, episode, name, url) VALUES (?, ?, ?, ?, ?)"
-        #sql_command = ""
-        #INSERT INTO episodes (show_id, season, episode, name, url, loc, quality)
-        #SELECT \"" + str(show_id) + "\", \"" + str(season) + "\", \"" + str(episode) + "\", \"" + name + "\", \"" + url + "\", \"" + loc + "\", \"" + quality + "\" WHERE NOT EXISTS(SELECT * FROM episodes WHERE show_id = \"" + str(show_id) + "\" AND season = \"" + str(season) + "\" AND episode = \"" + str(episode) + "\")"
 
         sql_command = """
         INSERT OR IGNORE INTO episodes
@@ -94,7 +91,6 @@ class DBManager(object):
                                           url,
                                           loc,
                                           quality))
-        #self.cursor.execute(sql_command) """
 
     def getShowID(self, name, lang):
         """Return show id."""

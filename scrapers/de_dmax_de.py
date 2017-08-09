@@ -1,31 +1,38 @@
+"""Scraper for dmax.de (DE)."""
 import scrapertools
 import re
 import json
 from bs4 import BeautifulSoup
 import requests
 
+
 class Scraper(scrapertools.BasicScraper):
+    """Basic Scraper for dmax.de (DE)."""
+
     BASE_URL = "http://www.dmax.de"
 
     def setup(self, app):
+        """Setup dmax.de sraper."""
         print("setup dmax")
         self.parent = app
         self.parent.register_scraper('de_dmax_de', self.scrape)
 
     def scrape(self):
+        """Scrape dmax.de."""
         r = requests.get(self.BASE_URL + "/videos/#dni-listing2143929440-alle")
         bs = BeautifulSoup(r.text, "html.parser")
 
-        shows_raw = bs.find("script", text=re.compile("\(function \(window\) {\n(.|\n)+")).string
+        p = re.compile("\(function \(window\) {\n(.|\n)+")
+        shows_raw = bs.find("script", text=p).string
 
-        # TODO: Use RE!!!
-        shows = shows_raw.split("ta = ")[1].split("if (typeof")[0].strip().rstrip(";")
+        shows_raw = shows_raw.split("ta = ")[1]
+        shows_raw = shows_raw.split("if (typeof")[0]
+        shows = shows_raw.strip().rstrip(";")
 
         j_shows = json.loads(shows)["raw"]
         for s in j_shows:
             myTVShowTitle = s["title"].rstrip(" - VIDEOS")
             url = s["url"]
-            #print(url)
             self.parent.myDB.addShow(myTVShowTitle, "de")
             myShowID = self.parent.myDB.getShowID(myTVShowTitle, "de")
             print(myShowID)
@@ -53,11 +60,12 @@ class Scraper(scrapertools.BasicScraper):
                         r = requests.get(url_firstvideo)
                         bs = BeautifulSoup(r.text, "html.parser")
 
-                        episodes = bs.find("div", class_="episode-list").find_all("a")
+                        episodes = bs.find("div", class_="episode-list")
+                        episodes = episodes.find_all("a")
+
                         for e in episodes:
                             url = e["href"]
                             episodeNumber = e.span.h3.string.lstrip("Episode ")
-                            #print(episodeNumber)
                             myEpisodeTitle = e.span.h3.next_sibling.string
                             self.parent.myDB.addEpisode(myShowID,
                                                         seasonNumber,
@@ -65,5 +73,5 @@ class Scraper(scrapertools.BasicScraper):
                                                         myEpisodeTitle,
                                                         url, "de", "unknown")
 
-                    except:
+                    except Exception:
                         print("Skip episode")
