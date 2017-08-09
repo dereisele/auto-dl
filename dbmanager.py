@@ -98,6 +98,8 @@ class DBManager(object):
 
     def getShowID(self, name, lang):
         """Return show id."""
+        name = self.prepareStr(name)
+
         sql_command = """
         SELECT id FROM shows
             WHERE name = ?
@@ -108,6 +110,8 @@ class DBManager(object):
 
     def getShowIDs(self, name):
         """Return ALL show id. (For debugging)."""
+        name = self.prepareStr(name)
+
         sql_command = """
         SELECT id FROM shows
             WHERE name == ?
@@ -128,7 +132,7 @@ class DBManager(object):
         self.cursor.execute(sql_command)
         return self.cursor.fetchall()
 
-    def getEpisodesToDL(self):
+    def getDownloadQueue(self):
         """Get download infos of episodes to download."""
         sql_command = """
         SELECT episodes.*, shows.name FROM episodes, episodes_dl, shows
@@ -139,8 +143,10 @@ class DBManager(object):
         self.cursor.execute(sql_command)
         return self.cursor.fetchall()
 
-    def addShowToDL(self, name, lang):
+    def orderShow(self, name, lang):
         """Add show to DL queue."""
+        name = self.prepareStr(name)
+
         sql_command = "INSERT INTO shows_dl (name, lang) VALUES (?, ?)"
 
         self.cursor.execute(sql_command, (name, lang))
@@ -151,7 +157,7 @@ class DBManager(object):
 
         self.cursor.execute(sql_command, (state, episode_id))
 
-    def removeEpisodeFromDL(self, episode_id):
+    def removeEpisodeFromQueue(self, episode_id):
         """Remove item from DL queue."""
         sql_command = "DELETE FROM episodes_dl WHERE episode_id = ?"
 
