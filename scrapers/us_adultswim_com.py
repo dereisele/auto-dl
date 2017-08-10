@@ -60,25 +60,27 @@ class Scraper(scrapertools.BasicScraper):
             for e in j_episodes["show"]["videos"]:
 
                 # Filters episodes, which require login
+                print(e["auth"])
                 if e["auth"]:
                     continue
 
-                # Neccessary to inserst Specials in DB
+                # Filter clips
                 if e["season_number"] != "":
                     seasonNumber = e["season_number"]
                 else:
-                    seasonNumber = "0"
+                    continue
 
                 if e["episode_number"] != "":
                     episodeNumber = e["episode_number"]
                 else:
-                    episodeNumber = "0"
+                    continue
 
                 myEpisodeTitle = e["title"]
-                url = show_url + "/" + e["slug"]
+                url = show_url + e["slug"]
 
                 self.parent.myDB.addEpisode(myShowID,
                                             seasonNumber,
                                             episodeNumber,
                                             myEpisodeTitle,
                                             url, "us", "unknown")
+                print("Inserted")

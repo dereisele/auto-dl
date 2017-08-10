@@ -3,6 +3,7 @@
 ## Gold:
 Adds **all** episodes in **nice** format, doesn't use workarounds
 - CBS.com
+- AdultSwim.com
 
 ## Silver:
 Adds **most** episodes in **nice** format
