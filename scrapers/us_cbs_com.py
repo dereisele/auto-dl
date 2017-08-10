@@ -47,7 +47,7 @@ class Scraper(scrapertools.BasicScraper):
                 done = False
 
                 while not done:
-                    print(" " + str(self.offset))
+                    print(" " + str(offset))
                     r = requests.get(url_episode.format(limit=limit,
                                                         offset=offset,
                                                         id=cID))
