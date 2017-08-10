@@ -31,7 +31,7 @@ class Downloader(object):
             cmdline = cmdline.format(loc=loc).split()
             subprocess.Popen(cmdline)
             self.VPN = loc
-            time.sleep(15)
+            time.sleep(30)
 
         if loc in (myLoc, "any"):
             self.release()

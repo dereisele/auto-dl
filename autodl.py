@@ -37,7 +37,7 @@ class AutoDl(object):
             i = sys.argv.index("-add")
             newShow = sys.argv[i + 1]
             newLang = sys.argv[i + 2]
-            self.myDB.addShowToDL(newShow, newLang)
+            self.myDB.orderShow(newShow, newLang)
 
         if doScrape:
             self.scrape()
