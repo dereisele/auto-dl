@@ -94,6 +94,15 @@ class AutoDl(object):
         if name not in self.config["SCRAPER"]:
             self.config["SCRAPER"][name] = "True"
 
+    def addConfigKey(self, section, key, default):
+        """Allow scrapers to add config keys."""
+        if section not in self.config.sections():
+            self.config.add_section(section)
+            self.save_config()
+        if key not in self.config[section]:
+            self.config.set(section, key, default)
+            self.save_config()
+
     def scrape(self):
         """Execute all scrapers."""
         for name, s in sorted(self.scrapers.items()):

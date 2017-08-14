@@ -1,6 +1,6 @@
 """Tools for scrapers."""
 import staticdata
-import requests
+
 
 class BasicScraper(object):
     """Class to inherite scrapers."""
@@ -31,3 +31,11 @@ class BasicScraper(object):
         self.parent.myDB.addEpisode(showID, seasonNumber,
                                     episodeNumber, episodeTitle,
                                     url, "de", quality)
+
+    def addConfigKey(self, key, default):
+        """Allow scrapers to add config keys."""
+        self.parent.addConfigKey(self.SCRAPER_ID, key, default)
+
+    def getConfigKey(self, key):
+        """Get config key."""
+        return dict(self.parent.config)[self.SCRAPER_ID][key]
