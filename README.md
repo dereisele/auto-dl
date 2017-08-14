@@ -74,6 +74,9 @@ Even a 35$ Raspberry Pi performs well and you can use it in audition as a NAS.
 ## Contribute:
 First I want to say thank you for considering contribiuting to this project.
 
+### TODO
+Take a look at the [todo branch](https://github.com/derEisele/auto-dl/blob/todo/README.md) if you want to complete the work of others. Feel free to start a pull request to this branch if you are stuck half way through a problem.  
+
 ### Writing a scraper
 - Use other scrapers as an example
 - Please add only full episodes to DB
