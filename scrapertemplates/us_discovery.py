@@ -1,12 +1,12 @@
 """Sraper template for Discovery Networks (USA)."""
-import scrapertools
 from bs4 import BeautifulSoup
 import re
 import requests
 import json
+from scrapertemplates import basic
 
 
-class DiscoveryScraper(scrapertools.BasicScraper):
+class DiscoveryScraper(basic.BasicScraper):
     """Scraper Template for DiscoveryGo (USA)."""
 
     CHANNEL = ""
@@ -77,8 +77,7 @@ class DiscoveryScraper(scrapertools.BasicScraper):
 
         myTVShowTitle = show[0]
 
-        self.parent.myDB.addShow(myTVShowTitle, "en")
-        myShowID = self.parent.myDB.getShowID(myTVShowTitle, "en")
+        myShowID = self.addShow(myTVShowTitle, "en")
 
         r = requests.get(url_episodes)
         bs = BeautifulSoup(r.text, "html.parser")

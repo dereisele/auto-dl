@@ -1,21 +1,16 @@
 """Scraper for adultswim.com (USA)."""
-import scrapertools
 import re
 import json
 from bs4 import BeautifulSoup
 import requests
+from scrapertemplates import basic
 
 
-class Scraper(scrapertools.BasicScraper):
+class Scraper(basic.BasicScraper):
     """Basic Scraper for adultswim.com (USA)."""
 
+    SCRAPER_ID = __name__
     BASE_URL = "http://www.adultswim.com"
-
-    def setup(self, app):
-        """Setup adultswim.com sraper."""
-        print("setup adultswim")
-        self.parent = app
-        self.parent.register_scraper('us_adultswim_com', self.scrape)
 
     def scrape(self):
         """Scrape adultswim.com."""

@@ -1,21 +1,16 @@
 """Scraper for cbs.com (USA)."""
-import scrapertools
 import re
 import json
 from bs4 import BeautifulSoup
 import requests
+from scrapertemplates import basic
 
 
-class Scraper(scrapertools.BasicScraper):
+class Scraper(basic.BasicScraper):
     """Basic Scraper for cbs.com (USA)."""
 
+    SCRAPER_ID = __name__
     BASE_URL = "http://www.cbs.com"
-
-    def setup(self, app):
-        """Setup cbs.com sraper."""
-        print("setup cbs")
-        self.parent = app
-        self.parent.register_scraper('us_cbs_com', self.scrape)
 
     def scrape(self):
         """Scrape cbs.com."""

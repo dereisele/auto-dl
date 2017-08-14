@@ -1,18 +1,13 @@
 import re
 from bs4 import BeautifulSoup
 import requests
-import scrapertools
+from scrapertemplates import basic
 
 
-class Scraper(scrapertools.BasicScraper):
+class Scraper(basic.BasicScraper):
 
+    SCRAPER_ID = __name__
     BASE_URL = "http://www.funk.net"
-    parent = ""
-
-    def setup(self, app):
-        print("setup Funk")
-        self.parent = app
-        self.parent.register_scraper('de_funk_net', self.scrape)
 
     def identify_show(self, name):
         """Translate messy show name to standard names."""
