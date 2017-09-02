@@ -25,6 +25,11 @@ class Scraper(basic.BasicScraper):
         for s in shows:
             myTVShowTitle = s.div.div.next_sibling.next_sibling.string
             url = s.div.div.a["href"]
+
+            # Filter CBS Sports
+            if "cbssports" in url:
+                continue
+
             self.parent.myDB.addShow(myTVShowTitle, "en")
             myShowID = self.parent.myDB.getShowID(myTVShowTitle, "en")
 
